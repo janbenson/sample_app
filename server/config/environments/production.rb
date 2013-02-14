@@ -9,6 +9,10 @@ config.action_controller.consider_all_requests_local = false
 config.action_controller.perform_caching             = true
 config.action_view.cache_template_loading            = true
 
+# Force all access to the app over SSL, use Strict-Transport-Security, 
+# and use secure cookies.
+config.force_ssl = true
+
 # See everything in the log (default is :info)
 # config.log_level = :debug
 
