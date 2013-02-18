@@ -1,9 +1,52 @@
 require 'spec_helper'
+require 'rspec/autorun'
 
-describe "UserPages" do
-	describe "sign_in page" do
-		before { visit  signin_path }
-		let(:Email)    { 'example@mail.com' }
-		let(:Password) { 'password' }
-  end
+describe "User pages" do
+
+  subject { page }
+  
+  shared_examples_for "all User pages" do
+    it { should have_selector('title', :text=> full_title(page_title)) }
+    it { should have_content('error') }
+  
+
+  describe "signup" do
+
+    before { visit signup_path }
+
+    let(:submit) { "Create my account" }
+
+    describe "with invalid information" do
+      it "should not create a user" do
+        expect { click_button submit }.not_to change(User, :count)
+      end
+    end
+
+    describe "with valid information" do
+      before do
+        fill_in "Name",         with: "Example User"
+        fill_in "Email",        with: "user@example.com"
+        fill_in "Password",     with: "foobar"
+        fill_in "Confirmation", with: "foobar"
+      end
+    end
+     it "should create a user" do
+        expect { click_button submit }.to change(User, :count).by(1)
+      end
+    describe "after submission" do
+        before { click_button submit }
+        let(:page_title) { 'Sign up' }
+      it_should_behave_like "all User pages"
+      end
+    describe "after saving the user" do
+        before { click_button submit }
+        let(:user) { User.find_by_email('user@example.com') }
+        let(:key)  {user.id}
+
+        it { should have_selector('title', text: user.name) }
+        it { should have_content('value', text: 'Welcome') }
+      end  
+    
+end
+end
 end
